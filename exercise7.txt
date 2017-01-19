@@ -1,0 +1,13 @@
+db.retaurants.find({},{restaurant_id:1, name:1, borough:1, cuisine:1})
+
+db.retaurants.find({borough:"Bronx"},{borough:1}).skip(5).limit(5)
+
+db.retaurants.find({grades:{$elemMatch:{score:{$gt:90}}}},{restaurant_id:1})
+
+
+Nog niet helemaal juist:
+db.retaurants
+.find({cuisine:{$ne:'American'}
+,grades:{$elemMatch:{score:{$gt:70}}}}
+,address:{$lt:-65.754168}
+,{restaurant_id:1,cuisine:1})

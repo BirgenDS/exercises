@@ -1,9 +1,13 @@
 UNF:
 dentist[staffNo, dentistName, patienNo, patientName, date, time, surgNo]
 
-1NF: = UNF
+1NF: 
+dentist[staffNo, dentistName, patienNo, patientName, surgNo]
+appointment[date, time]
+keys: staffNo, date, time
 
 2NF:
+appointment[staffNo, date, time, patientNo, ]
 dentist[staffNo(pk), dentistName]
 patient[patientNo(pk), patientName]
 surgery[apptNo(pk), staffNo(fk), patientNo(fk), date, time, surgNo]
@@ -16,5 +20,9 @@ tussen[time, apptNo]
 tijdstip[time, surgNo]
 
 BCNF=3NF
+
+zie oplossing leho
+keys: met komma's gescheiden 1 key
+door streepjes gescheiden keys in verschillende databases
 
 

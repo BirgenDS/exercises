@@ -15,3 +15,5 @@ drugs[patientNo(fk), drugNo(pk), drugName, descr, dosage, method]
 time[patientNo(fk), startDate(pk), finDate]
 
 BCNF: =3NF
+
+oplossing zie leho

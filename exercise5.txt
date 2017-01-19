@@ -1,0 +1,202 @@
+Oplossingen zie leho! Alle query's nog nakijken, velen fout!
+
+SELECT guestname, guestaddress FROM guest JOIN booking ON guest.guestno = booking.guestno JOIN hotel ON booking.hotelno = hotel.hotelno where city ="London";
++--------------+-----------------------+
+| guestname    | guestaddress          |
++--------------+-----------------------+
+| Carol Farrel | 6 Achray St, Glasgow  |
+| Joe Keogh    | 2 Fergus Dr, Aberdeen |
+| John Kay     | 56 High St, London    |
+| John Kay     | 56 High St, London    |
+| Mike Ritchie | 18 Tain St, London    |
+| Mike Ritchie | 18 Tain St, London    |
+| Tina Murphy  | 63 Well St, Glasgow   |
++--------------+-----------------------+
+
+Alternatief (juist):
+
+SELECT guestname, guestaddress FROM guest WHERE guestaddress like "%, London" ORDER BY guestname;
++--------------+--------------------+
+| guestname    | guestaddress       |
++--------------+--------------------+
+| John Kay     | 56 High St, London |
+| Mike Ritchie | 18 Tain St, London |
++--------------+--------------------+
+
+SELECT * FROM room WHERE (type="family" or type = "double") and price < 40.00 ORDER BY price;
++--------+---------+--------+-------+
+| roomno | hotelno | type   | price |
++--------+---------+--------+-------+
+|    801 | ch02    | double | 15.00 |
+|    601 | fb01    | double | 29.00 |
+|   1001 | dc01    | double | 30.00 |
+|   1101 | dc01    | family | 35.00 |
+|    701 | fb01    | family | 39.00 |
++--------+---------+--------+-------+
+
+
+SELECT * FROM booking WHERE dateto is NULL;
++---------+---------+------------+--------+--------+
+| hotelno | guestno | datefrom   | dateto | roomno |
++---------+---------+------------+--------+--------+
+| ch01    |   10006 | 2004-04-21 | NULL   |   1101 |
+| dc01    |   10003 | 2004-05-20 | NULL   |   1001 |
+| fb01    |   10001 | 2004-05-01 | NULL   |    701 |
++---------+---------+------------+--------+--------+
+
+SELECT avg(price) as average FROM room;
++-----------+
+| average   |
++-----------+
+| 35.748333 |
++-----------+
+
+SELECT sum(price) as total FROM room WHERE type="double";
++--------+
+| total  |
++--------+
+| 160.00 |
++--------+
+
+SELECT * FROM booking WHERE datefrom like "%-08-%";
+Empty set, 1 warning (0.00 sec)
+
+SELECT price, type, hotelname FROM room JOIN hotel ON room.hotelno = hotel.hotelno WHERE hotelname = "Grosvenor";
++-------+--------+-----------+
+| price | type   | hotelname |
++-------+--------+-----------+
+| 19.00 | single | Grosvenor |
+| 29.00 | double | Grosvenor |
+| 39.00 | family | Grosvenor |
++-------+--------+-----------+
+
+SELECT guestname, hotelname FROM guest  JOIN booking ON guest.guestno = booking.guestno JOIN hotel ON booking.hotelno = hotel.hotelno WHERE hotelname = "Grosvenor" GROUP BY guestname;
++--------------+-----------+
+| guestname    | hotelname |
++--------------+-----------+
+| Carol Farrel | Grosvenor |
+| Joe Keogh    | Grosvenor |
+| John Kay     | Grosvenor |
+| Mike Ritchie | Grosvenor |
++--------------+-----------+
+
+LIST DETAILS OF ROOMS (fout):
+
+SELECT room.roomno, room.type, room.price, hotel.hotelname, guestname, guest.guestaddress FROM guest JOIN booking ON guest.guestno = booking.guestno JOIN room ON booking.roomno = room.roomno JOIN hotel ON room.hotelno = hotel.hotelno WHERE hotelname = "Grosvenor" and (dateto is NULL or year(dateto>2016)) ;
++--------+--------+-------+-----------+-----------+--------------------+
+| roomno | type   | price | hotelname | guestname | guestaddress       |
++--------+--------+-------+-----------+-----------+--------------------+
+|    701 | family | 39.00 | Grosvenor | John Kay  | 56 High St, London |
++--------+--------+-------+-----------+-----------+--------------------+
+
+ook fout:
+
+SELECT room.roomno, room.type, room.price, hotel.hotelname, guestname, guest.guestaddress FROM guest JOIN booking ON guest.guestno = booking.guestno JOIN room ON booking.roomno = room.roomno JOIN hotel ON room.hotelno = hotel.hotelno WHERE hotelname = "Grosvenor";
++--------+--------+-------+-----------+--------------+-----------------------+
+| roomno | type   | price | hotelname | guestname    | guestaddress          |
++--------+--------+-------+-----------+--------------+-----------------------+
+|    501 | single | 19.00 | Grosvenor | John Kay     | 56 High St, London    |
+|    501 | single | 19.00 | Grosvenor | Carol Farrel | 6 Achray St, Glasgow  |
+|    601 | double | 29.00 | Grosvenor | Mike Ritchie | 18 Tain St, London    |
+|    601 | double | 29.00 | Grosvenor | Joe Keogh    | 2 Fergus Dr, Aberdeen |
+|    701 | family | 39.00 | Grosvenor | John Kay     | 56 High St, London    |
++--------+--------+-------+-----------+--------------+-----------------------+
+
+juist:
+SELECT * FROM room JOIN hotel ON room.hotelno = hotel.hotelno JOIN booking ON hotel.hotelno = booking.hotelno Join guest ON booking.guestno = guest.guestno WHERE hotelname = "Grosvenor" and dateto IS NOT NULL and datefrom is NOT NULL;
++--------+---------+--------+-------+---------+-----------+--------+---------+---------+------------+------------+--------+---------+--------------+-----------------------+
+| roomno | hotelno | type   | price | hotelno | hotelname | city   | hotelno | guestno | datefrom   | dateto     | roomno | guestno | guestname    | guestaddress          |
++--------+---------+--------+-------+---------+-----------+--------+---------+---------+------------+------------+--------+---------+--------------+-----------------------+
+|    501 | fb01    | single | 19.95 | fb01    | Grosvenor | London | fb01    |   10001 | 2004-04-01 | 2004-04-08 |    501 |   10001 | John Kay     | 56 High St, London    |
+|    601 | fb01    | double | 30.45 | fb01    | Grosvenor | London | fb01    |   10001 | 2004-04-01 | 2004-04-08 |    501 |   10001 | John Kay     | 56 High St, London    |
+|    701 | fb01    | family | 40.95 | fb01    | Grosvenor | London | fb01    |   10001 | 2004-04-01 | 2004-04-08 |    501 |   10001 | John Kay     | 56 High St, London    |
+|    501 | fb01    | single | 19.95 | fb01    | Grosvenor | London | fb01    |   10002 | 2016-05-04 | 2004-05-29 |    601 |   10002 | Mike Ritchie | 18 Tain St, London    |
+|    601 | fb01    | double | 30.45 | fb01    | Grosvenor | London | fb01    |   10002 | 2016-05-04 | 2004-05-29 |    601 |   10002 | Mike Ritchie | 18 Tain St, London    |
+|    701 | fb01    | family | 40.95 | fb01    | Grosvenor | London | fb01    |   10002 | 2016-05-04 | 2004-05-29 |    601 |   10002 | Mike Ritchie | 18 Tain St, London    |
+|    501 | fb01    | single | 19.95 | fb01    | Grosvenor | London | fb01    |   10004 | 2004-04-15 | 2004-05-15 |    601 |   10004 | Joe Keogh    | 2 Fergus Dr, Aberdeen |
+|    601 | fb01    | double | 30.45 | fb01    | Grosvenor | London | fb01    |   10004 | 2004-04-15 | 2004-05-15 |    601 |   10004 | Joe Keogh    | 2 Fergus Dr, Aberdeen |
+|    701 | fb01    | family | 40.95 | fb01    | Grosvenor | London | fb01    |   10004 | 2004-04-15 | 2004-05-15 |    601 |   10004 | Joe Keogh    | 2 Fergus Dr, Aberdeen |
+|    501 | fb01    | single | 19.95 | fb01    | Grosvenor | London | fb01    |   10005 | 2004-05-02 | 2004-05-07 |    501 |   10005 | Carol Farrel | 6 Achray St, Glasgow  |
+|    601 | fb01    | double | 30.45 | fb01    | Grosvenor | London | fb01    |   10005 | 2004-05-02 | 2004-05-07 |    501 |   10005 | Carol Farrel | 6 Achray St, Glasgow  |
+|    701 | fb01    | family | 40.95 | fb01    | Grosvenor | London | fb01    |   10005 | 2004-05-02 | 2004-05-07 |    501 |   10005 | Carol Farrel | 6 Achray St, Glasgow  |
++--------+---------+--------+-------+---------+-----------+--------+---------+---------+------------+------------+--------+---------+--------------+-----------------------+
+
+
+FOUT: (sum doen van price en group by hotelname -> null als resultaat)
+SELECT room.price as total, hotel.hotelname, booking.datefrom, booking.dateto FROM room JOIN hotel ON room.hotelno = hotel.hotelno JOIN booking ON room.roomno = booking.roomno WHERE hotelname = "Grosvenor" and (year(dateto>2016) or dateto is NULL) ;
++-------+-----------+------------+--------+
+| total | hotelname | datefrom   | dateto |
++-------+-----------+------------+--------+
+| 39.00 | Grosvenor | 2004-05-01 | NULL   |
++-------+-----------+------------+--------+
+
+FOUT: dateto moet kleiner dan vandaag EN datefrom groter -> vandaag niet bezet
+
+SELECT room.roomno, hotel.hotelname, booking.dateto FROM room JOIN booking ON room.roomno = booking.roomno JOIN hotel ON room.hotelno = hotel.hotelno WHERE hotelname = "Grosvenor" and curdate() > dateto;
++--------+-----------+------------+
+| roomno | hotelname | dateto     |
++--------+-----------+------------+
+|    501 | Grosvenor | 2004-04-08 |
+|    601 | Grosvenor | 2004-05-29 |
+|    601 | Grosvenor | 2004-05-15 |
+|    501 | Grosvenor | 2004-05-07 |
++--------+-----------+------------+
+
+FOUT: dateto moet kleiner dan vandaag EN datefrom groter -> vandaag niet bezet, online kijken nog steeds fout
+
+SELECT sum(room.price) FROM room JOIN booking ON room.roomno = booking.roomno JOIN hotel ON booking.hotelno = hotel.hotelno WHERE hotelname = "Grosvenor" and (curdate() > dateto or curdate() < datefrom);
++-----------------+
+| sum(room.price) |
++-----------------+
+|           96.00 |
++-----------------+
+
+JUIST:
+
+SELECT hotelname, count(*) as rooms FROM hotel JOIN room ON hotel.hotelno = room.hotelno WHERE city = "London" GROUP BY hotelname;
++---------------+-------+
+| hotelname     | rooms |
++---------------+-------+
+| Grosvenor     |     3 |
+| Omni Shoreham |     2 |
+| Phoenix Park  |     2 |
++---------------+-------+
+
+fout geïnterpreteerd: per hotel in londen de meest geboekte kamer
+hotelnaam nog bijzetten en groeperen op ...
+
+SELECT count(*) as count, type FROM booking JOIN room ON booking.roomno = room.roomno GROUP BY type ORDER BY count asc;
++-------+--------+
+| count | type   |
++-------+--------+
+|     5 | family |
+|     8 | double |
+|     9 | single |
++-------+--------+
+
+UPDATE room set price = price*1.05;
+SELECT * FROM room;
++--------+---------+--------+-------+
+| roomno | hotelno | type   | price |
++--------+---------+--------+-------+
+|    501 | fb01    | single | 19.95 |
+|    601 | fb01    | double | 30.45 |
+|    701 | ch02    | single | 10.50 |
+|    701 | fb01    | family | 40.95 |
+|    801 | ch02    | double | 15.75 |
+|    901 | dc01    | single | 18.90 |
+|   1001 | ch01    | single | 31.49 |
+|   1001 | dc01    | double | 31.50 |
+|   1001 | fb02    | single | 60.90 |
+|   1101 | ch01    | family | 62.99 |
+|   1101 | dc01    | family | 36.75 |
+|   1101 | fb02    | double | 90.30 |
++--------+---------+--------+-------+
+
+
+
+
+
+
+
+
