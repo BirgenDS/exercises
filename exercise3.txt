@@ -1,0 +1,17 @@
+1NF:
+patient[PatienNo(pk), fullName, wardNo, wardName, bedNo]
+drugs[drugNo(pk), drugName, descr, dosage, method, units, startDate, finDate]
+
+2NF:
+patient[PatienNo(pk), fullName, units]
+Ward[patientNo(fk), warNo(pk), wardName, bedNo]
+drugs[patientNo(fk), drugNo(pk), drugName, descr, dosage, method, units]
+time[patientNo(fk), startDate(pk), finDate, units]
+
+3NF:
+patient[PatienNo(pk), fullName, units]
+Ward[patientNo(fk), warNo(pk), wardName, bedNo]
+drugs[patientNo(fk), drugNo(pk), drugName, descr, dosage, method]
+time[patientNo(fk), startDate(pk), finDate]
+
+BCNF: =3NF
