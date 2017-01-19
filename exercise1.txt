@@ -1,0 +1,12 @@
+mkdir exercises
+cd exercises
+git init
+touch exercise1.txt
+gedit exercise1.txt &
+git add exercise1.txt
+git status
+git commit -m exercise1
+git log
+git remote add origin https://github.com/BirgenDS/exercises.git
+git push -u origin master
+
