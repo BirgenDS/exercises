@@ -5,19 +5,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema exercise4
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema exercise4
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `exercise4` DEFAULT CHARACTER SET utf8 ;
+USE `exercise4` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Doctor`
+-- Table `exercise4`.`Doctor`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Doctor` (
+CREATE TABLE IF NOT EXISTS `exercise4`.`Doctor` (
   `idDoctor` INT NOT NULL,
   `Name` VARCHAR(45) NULL,
   `DOB` DATE NULL,
@@ -29,9 +29,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Medical`
+-- Table `exercise4`.`Medical`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Medical` (
+CREATE TABLE IF NOT EXISTS `exercise4`.`Medical` (
   `idMedical` INT NOT NULL,
   `idDoctor` INT NULL,
   `overtime_rate` TIME NULL,
@@ -39,16 +39,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Medical` (
   INDEX `fk_Medical_1_idx` (`idDoctor` ASC),
   CONSTRAINT `fk_Medical_1`
     FOREIGN KEY (`idDoctor`)
-    REFERENCES `mydb`.`Doctor` (`idDoctor`)
+    REFERENCES `exercise4`.`Doctor` (`idDoctor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Specialist`
+-- Table `exercise4`.`Specialist`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Specialist` (
+CREATE TABLE IF NOT EXISTS `exercise4`.`Specialist` (
   `idSpecialist` INT NOT NULL,
   `idDoctor` INT NULL,
   `field_area` VARCHAR(45) NULL,
@@ -56,16 +56,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Specialist` (
   INDEX `fk_Specialist_1_idx` (`idDoctor` ASC),
   CONSTRAINT `fk_Specialist_1`
     FOREIGN KEY (`idDoctor`)
-    REFERENCES `mydb`.`Doctor` (`idDoctor`)
+    REFERENCES `exercise4`.`Doctor` (`idDoctor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Patient`
+-- Table `exercise4`.`Patient`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Patient` (
+CREATE TABLE IF NOT EXISTS `exercise4`.`Patient` (
   `idPatient` INT NOT NULL,
   `Name` VARCHAR(45) NULL,
   `DOB` DATE NULL,
@@ -76,9 +76,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Payment`
+-- Table `exercise4`.`Payment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Payment` (
+CREATE TABLE IF NOT EXISTS `exercise4`.`Payment` (
   `idPayment` INT NOT NULL,
   `details` VARCHAR(45) NULL,
   `methods` VARCHAR(45) NULL,
@@ -87,9 +87,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Appointment`
+-- Table `exercise4`.`Appointment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Appointment` (
+CREATE TABLE IF NOT EXISTS `exercise4`.`Appointment` (
   `idAppointment` INT NOT NULL,
   `idPatient` INT NULL,
   `idDoctor` INT NULL,
@@ -102,26 +102,26 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Appointment` (
   INDEX `fk_Appointment_3_idx` (`idPayment` ASC),
   CONSTRAINT `fk_Appointment_1`
     FOREIGN KEY (`idPatient`)
-    REFERENCES `mydb`.`Patient` (`idPatient`)
+    REFERENCES `exercise4`.`Patient` (`idPatient`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Appointment_2`
     FOREIGN KEY (`idDoctor`)
-    REFERENCES `mydb`.`Doctor` (`idDoctor`)
+    REFERENCES `exercise4`.`Doctor` (`idDoctor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Appointment_3`
     FOREIGN KEY (`idPayment`)
-    REFERENCES `mydb`.`Payment` (`idPayment`)
+    REFERENCES `exercise4`.`Payment` (`idPayment`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Bill`
+-- Table `exercise4`.`Bill`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Bill` (
+CREATE TABLE IF NOT EXISTS `exercise4`.`Bill` (
   `idBill` INT NOT NULL,
   `idPatient` INT NULL,
   `Total` INT NULL,
@@ -130,9 +130,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Payment_bill`
+-- Table `exercise4`.`Payment_bill`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Payment_bill` (
+CREATE TABLE IF NOT EXISTS `exercise4`.`Payment_bill` (
   `idCrossreff` INT NOT NULL,
   `idPayment` INT NULL,
   `idBill` INT NULL,
@@ -141,12 +141,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Payment_bill` (
   INDEX `fk_Crossreff_2_idx` (`idBill` ASC),
   CONSTRAINT `fk_Crossreff_1`
     FOREIGN KEY (`idPayment`)
-    REFERENCES `mydb`.`Payment` (`idPayment`)
+    REFERENCES `exercise4`.`Payment` (`idPayment`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Crossreff_2`
     FOREIGN KEY (`idBill`)
-    REFERENCES `mydb`.`Bill` (`idBill`)
+    REFERENCES `exercise4`.`Bill` (`idBill`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
