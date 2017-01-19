@@ -9,4 +9,7 @@ git commit -m exercise1
 git log
 git remote add origin https://github.com/BirgenDS/exercises.git
 git push -u origin master
+git add *.txt
+git commit -m exercise1-2
+git push
 
