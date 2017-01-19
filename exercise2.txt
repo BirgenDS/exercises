@@ -1,0 +1,20 @@
+UNF:
+dentist[staffNo, dentistName, patienNo, patientName, date, time, surgNo]
+
+1NF: = UNF
+
+2NF:
+dentist[staffNo(pk), dentistName]
+patient[patientNo(pk), patientName]
+surgery[apptNo(pk), staffNo(fk), patientNo(fk), date, time, surgNo]
+
+3NF:
+dentist[staffNo(pk), dentistName]
+patient[patientNo(pk), patientName]
+surgery[apptNo(pk), staffNo(fk), patientNo(fk), date, surgNo]
+tussen[time, apptNo]
+tijdstip[time, surgNo]
+
+BCNF=3NF
+
+
